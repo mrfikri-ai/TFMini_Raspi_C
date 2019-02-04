@@ -99,9 +99,6 @@ int main()
 	
 	while(1)
 	{	  
-		double __kalman_res = KalmanFilterInit(distance);
-	    	double __entropy_res = InformationEntropyInit(__kalman_res);
-
 		while(serialDataAvail(fd))
 		{
 			buffer[cnt] = serialGetchar(fd);
@@ -163,7 +160,11 @@ int main()
 		{
 			int distance = (int)(buffer[2] | ((int)buffer[3] << 8));
 			int strength = (int)(buffer[4] | ((int)buffer[5] << 8));
-			printf("Distance: %d, Kalman: %f, Entropy: %f \n", distance, __kalman_res, __entropy_res);
+			double __kalman_res = KalmanFilterInit(distance);
+		    	double __entropy_res = InformationEntropyInit(__kalman_res);
+			
+			printf("Distance: %d, Strength: %d, Kalman: %f, Entropy: %f \n", 
+			       distance, strength, __kalman_res, __entropy_res);
 			
      		 flag = false;
 		}

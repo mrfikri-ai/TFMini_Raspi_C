@@ -82,8 +82,6 @@ int main()
 	int cnt = 0; 
 	char buffer[100] = {0};
 	bool flag = false;
-	double __kalman_res = KalmanFilterInit(distance);
-    	double __entropy_res = InformationEntropyInit(__kalman_res);
 	
 	if(wiringPiSetup () == -1)
 	{
@@ -101,6 +99,9 @@ int main()
 	
 	while(1)
 	{	  
+		double __kalman_res = KalmanFilterInit(distance);
+	    	double __entropy_res = InformationEntropyInit(__kalman_res);
+
 		while(serialDataAvail(fd))
 		{
 			buffer[cnt] = serialGetchar(fd);

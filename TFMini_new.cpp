@@ -1,3 +1,10 @@
+// In this program, we included a Kalman filter estimation
+// to reduce the noise of error reading
+// Also information entropy to help the reading
+// sustain from the uncertainty of the errorness
+
+//Created by: Muhamad Rausyan Fikri
+
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -75,7 +82,9 @@ int main()
 	int cnt = 0; 
 	char buffer[100] = {0};
 	bool flag = false;
-
+	double __kalman_res = KalmanFilterInit(distance);
+    	double __entropy_res = InformationEntropyInit(__kalman_res);
+	
 	if(wiringPiSetup () == -1)
 	{
 		printf("test");
@@ -91,10 +100,7 @@ int main()
 
 	
 	while(1)
-	{
-	  double __kalman_res = KalmanFilterInit(distance);
-    double __entropy_res = InformationEntropyInit(__kalman_res);
-    
+	{	  
 		while(serialDataAvail(fd))
 		{
 			buffer[cnt] = serialGetchar(fd);
@@ -158,7 +164,7 @@ int main()
 			int strength = (int)(buffer[4] | ((int)buffer[5] << 8));
 			printf("Distance: %d, Kalman: %f, Entropy: %f \n", distance, __kalman_res, __entropy_res);
 			
-      flag = false;
+     		 flag = false;
 		}
 
 	}

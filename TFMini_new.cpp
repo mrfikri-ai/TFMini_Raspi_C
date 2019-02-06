@@ -27,6 +27,27 @@ enum TestData{
 
 double KalmanFilterInit(double distance)
 {
+	double R = 6e-3, Q = 1e-4;
+	double Xpe0 = 0.0, Xe1 = 0.0, Xe0 = 0.0;
+	double P1 = 1.0, Ppe0 = 0.0, P0 = 0;
+	double  K = 0.0, Z = 0.0;
+	double kal_fil;
+
+	Z = distance;
+	Xpe0 = Xe1;
+	Ppe0 = P1 + Q;
+	K = Ppe0/(Ppe0+R);
+	Xe0 = Xpe0 + K * (Z-Xpe0);
+	P0 = (1-K)*Ppe0;
+	kal_fil = Xe0;
+	Xe1 = Xe0; P1 = P0;
+
+	return kal_fil;
+
+}
+/*
+double KalmanFilterInit(double distance)
+{
     // Define Kalman Filter Parameter
     double m_kalman_filter; 
     double m_x_present = 0.0, m_x_previous = 0.0, m_x_future = 0.0;
@@ -52,7 +73,27 @@ double KalmanFilterInit(double distance)
     
     return m_kalman_filter;
 }
+*/
 
+double InformationEntropyInit(double jarak)
+{
+	// Define H variable as the result of entropy
+	for(int i = 0; i<5; i++)
+		{
+			KalmanFilter[i] = KalmanFilterInit(jarak);
+		}
+
+//		double h  =-((KalmanFilter[0]*(log(KalmanFilter[0])/log(2))+KalmanFilter[1]*(log(KalmanFilter[1])/log(2))
+//		      +KalmanFilter[2]*(log(KalmanFilter[2])/log(2))+KalmanFilter[3]*(log(KalmanFilter[3])/log(2))
+//		      +KalmanFilter[4]*(log(KalmanFilter[4])/log(2))))/5;
+
+		double h  =-((KalmanFilter[0]*(log2(KalmanFilter[0]))+KalmanFilter[1]*(log2(KalmanFilter[1]))
+				      +KalmanFilter[2]*(log2(KalmanFilter[2]))+KalmanFilter[3]*(log2(KalmanFilter[3]))
+				      +KalmanFilter[4]*(log2(KalmanFilter[4]))))/5;
+
+		return h;
+}
+/*
 double InformationEntropyInit(double probability)
 {
   // Here we calculate the information entropy from kalman filter data
@@ -74,6 +115,7 @@ double InformationEntropyInit(double probability)
               
   return m_entropy;
 }
+*/
 
 int main()
 {

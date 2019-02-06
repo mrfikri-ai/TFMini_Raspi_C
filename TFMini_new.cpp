@@ -28,23 +28,24 @@ enum TestData{
 double KalmanFilterInit(double distance)
 {
 	double R = 6e-3, Q = 1e-4;
-	double Xpe0 = 0.0, Xe1 = 0.0, Xe0 = 0.0;
-	double P1 = 1.0, Ppe0 = 0.0, P0 = 0;
+	double X_present = 0.0, X_previous = 0.0, X_after = 0.0;
+	double Ppresent = 1.0, Pprevious = 0.0, Pafter = 0;
 	double  K = 0.0, Z = 0.0;
 	double kal_fil;
 
 	Z = distance;
-	Xpe0 = Xe1;
-	Ppe0 = P1 + Q;
-	K = Ppe0/(Ppe0+R);
-	Xe0 = Xpe0 + K * (Z-Xpe0);
-	P0 = (1-K)*Ppe0;
-	kal_fil = Xe0;
-	Xe1 = Xe0; P1 = P0;
+	X_present = X_previous;
+	Pprevious = Ppresent + Q;
+	K = Pprevious/(Pprevious+R);
+	X_after = X_present + K * (Z-X_present);
+	Pafter = (1-K)*Pprevious;
+	kal_fil = X_after;
+	X_previous = X_after; Ppresent = Pafter;
 
 	return kal_fil;
 
 }
+
 /*
 double KalmanFilterInit(double distance)
 {
@@ -74,7 +75,7 @@ double KalmanFilterInit(double distance)
     return m_kalman_filter;
 }
 */
-
+/*
 double InformationEntropyInit(double jarak)
 {
 	// Define H variable as the result of entropy
@@ -93,7 +94,8 @@ double InformationEntropyInit(double jarak)
 
 		return h;
 }
-/*
+*/
+
 double InformationEntropyInit(double probability)
 {
   // Here we calculate the information entropy from kalman filter data
@@ -115,7 +117,7 @@ double InformationEntropyInit(double probability)
               
   return m_entropy;
 }
-*/
+
 
 int main()
 {
